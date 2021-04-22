@@ -1,6 +1,16 @@
-import { useEffect } from 'react';
+import { GetStaticProps } from 'next';
 
-export default function Home(props) {
+type Episode = {
+  id: string;
+  title: string;
+  members: string;
+}
+
+type HomeProps = {
+  episodes: Episode[];
+}
+
+export default function Home(props: HomeProps) {
 
   /*
     CONSUMINFO API: SPA
@@ -25,9 +35,6 @@ export default function Home(props) {
 
   */
 
-
-
-
   return (
     <>
       <h1>Esta é a página inicial</h1>
@@ -37,7 +44,7 @@ export default function Home(props) {
 }
 
 //Consumindo API com SSG
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
   const response = await fetch('http://localhost:3333/episodes');
   const data = await response.json();
 
