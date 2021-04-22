@@ -1,4 +1,5 @@
 import { GetStaticProps } from 'next';
+import { api } from '../services/api';
 
 type Episode = {
   id: string;
@@ -45,8 +46,13 @@ export default function Home(props: HomeProps) {
 
 //Consumindo API com SSG
 export const getStaticProps: GetStaticProps = async () => {
-  const response = await fetch('http://localhost:3333/episodes');
-  const data = await response.json();
+  const { data } = await api.get('episodes', {
+    params: {
+      _limit: 12,
+      _sort: 'published_at',
+      _order: 'desc'
+    }
+  });
 
   //Uma versão estática vai ser cacheada e a cada 8 horas eu faço um novo acesso a api a atualizo
   return {
@@ -55,5 +61,4 @@ export const getStaticProps: GetStaticProps = async () => {
     },
     revalidate: 60 * 60 * 8
   }
-
 }
